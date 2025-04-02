@@ -1,17 +1,22 @@
 on:
-  rss:
-    url: https://hnrss.org/newest?points=300&count=3
+  reddit:
+    url: https://www.reddit.com/search/.rss?q=codes+tcg&type=posts&sort=new
+
 jobs:
-  print:
-    name: Print
+  send-to-telegram:
+    name: Send Reddit Post to Telegram
     runs-on: ubuntu-latest
     steps:
-      - name: Print Outputs
-        env:
-          title: ${{on.rss.outputs.title}}
-          contentSnippet: ${{on.rss.outputs.contentSnippet}}
-          link: ${{on.rss.outputs.link}}
-        run: |
-          echo title: $title
-          echo contentSnippet: $contentSnippet
-          echo link: $link
+      - name: Send message to Telegram
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            🔍 *Nuevo post de Reddit sobre códigos TCG:*
+
+            *${{ on.reddit.outputs.title }}*
+            ${{ on.reddit.outputs.contentSnippet }}
+
+            👉 [Ver post](${{ on.reddit.outputs.link }})
