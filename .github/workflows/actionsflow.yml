@@ -20,6 +20,12 @@ on:
         description: "--verbose: debug workflow, true or false"
         required: false
         default: "false"
+
+permissions:
+  contents: read
+  actions: read
+  issues: write
+
 jobs:
   run:
     runs-on: ubuntu-latest
